@@ -4,6 +4,7 @@ import userController from "../controllers/userController";
 import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
 import specialtyController from "../controllers/specialtyController";
+import blogController from "../controllers/blogController";
 
 let router = express.Router();
 
@@ -32,6 +33,13 @@ let initWebRoutes = (app) => {
     router.get('/get-specialty-info', specialtyController.handleGetSpecialtyInfo)
     router.get('/get-specialty-by-id', specialtyController.handleGetSpecialById)
     router.get('/get-doctor-by-specialty', specialtyController.handleGetDoctorBySpecialty)
+    router.post('/create-clinic-info', specialtyController.handleCreateClinicInfo)
+    router.get('/get-clinic-info', specialtyController.handleGetClinicInfo)
+    router.get('/get-clinic-by-id', specialtyController.handleGetClinicById)
+    router.post('/create-blog-content', blogController.handleCreateBlogContent)
+    router.get('/get-blog-info', blogController.handleGetBlogInfo)
+    router.get('/get-blog-by-id', blogController.handleGetBlogById)
+    router.get('')
     return app.use("/", router)
 }
 module.exports = initWebRoutes

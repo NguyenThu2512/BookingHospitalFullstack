@@ -52,9 +52,53 @@ const handleGetDoctorBySpecialty = async(req, res) => {
         })
     }
 }
+
+const handleCreateClinicInfo = async(req, res) => {
+    try {
+        let result = await SpecialtyService.createClinicInfo(req.body)
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            errorCode: -1,
+            errorMessage: "Error from server..."
+        })
+    }
+}
+
+const handleGetClinicInfo = async(req, res) => {
+    try {
+        let result = await SpecialtyService.getClinicInfo()
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            errorCode: -1,
+            errorMessage: "Error from server..."
+        })
+    }
+}
+
+const handleGetClinicById = async(req, res) => {
+    try {
+        let result = await SpecialtyService.getClinicById(req.query.clinicId)
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            errorCode: -1,
+            errorMessage: "Error from server..."
+        })
+    }
+}
+
+
 module.exports = {
     handleCreateSpecialtyInfo: handleCreateSpecialtyInfo,
     handleGetSpecialtyInfo: handleGetSpecialtyInfo,
     handleGetSpecialById: handleGetSpecialById,
-    handleGetDoctorBySpecialty: handleGetDoctorBySpecialty
+    handleGetDoctorBySpecialty: handleGetDoctorBySpecialty,
+    handleCreateClinicInfo: handleCreateClinicInfo,
+    handleGetClinicInfo: handleGetClinicInfo,
+    handleGetClinicById: handleGetClinicById
 }

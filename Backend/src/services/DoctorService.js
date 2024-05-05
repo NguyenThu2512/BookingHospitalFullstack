@@ -15,8 +15,8 @@ const getTopDoctor = (limitInput) => {
                 where: { roleId: "R2" },
                 attributes: { exclude: ['password'] },
                 include: [
-                    { model: db.Allcode, as: 'positionData', attribute: ['valueEn', 'valueVi'] },
-                    { model: db.Allcode, as: 'genderData', attribute: ['valueEn', 'valueVi'] }
+                    { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+                    { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] }
                 ],
                 raw: true,
                 nest: true
@@ -37,12 +37,34 @@ const getAllDoctor = () => {
         try {
             let doctors = await db.User.findAll({
                 where: { roleId: "R2" },
-                attributes: { exclude: ['password', 'image'] },
+                attributes: { exclude: ['password'] },
+                include: [
+                    { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+                    { model: db.Allcode, as: 'roleData', attributes: ['valueEn', 'valueVi'] },
+                    {
+                        model: db.Doctor_Infor,
+                        attributes: ['specialtyId'],
+                        include: [{
+                            model: db.Specialty,
+                            attributes: ['name', 'id']
+                        }]
+                    }
+                ],
+                raw: true,
+                nest: true
+
+
             })
             if (doctors) {
+                let doctorList = [];
+                doctorList = doctors.map(item => {
+                    item.image = new Buffer(item.image, 'base64').toString('binary')
+                    return item
+                })
+
                 resolve({
                     errorCode: 0,
-                    data: doctors
+                    data: doctorList
                 })
             } else {
                 resolve({
@@ -150,6 +172,7 @@ const getDoctorDetail = (doctorId) => {
             if (doctorDetail && !_.isEmpty(doctorDetail) && doctorDetail.image) {
                 let imageBase64 = new Buffer(doctorDetail.image, 'base64').toString('binary')
                 doctorDetail.image = imageBase64;
+
                 resolve({
                     errorCode: 0,
                     data: doctorDetail
